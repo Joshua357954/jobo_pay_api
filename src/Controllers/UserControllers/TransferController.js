@@ -2,7 +2,7 @@ const { Op } = require('sequelize')
 const { Response } = require('../utils.js')
 const db = require('../../Database/models/index.js')
 const { SendMoneySchema } = require('./UserZodSchema.js')
-const { addBeneficiary } require('./BeneficiaryController.js')
+const { addBeneficiary } = require('./BeneficiaryController.js')
 const { createSenderUserTransaction, createReceiverUserTransaction } = require('./TransactionController.js')
 
 const User = db.User

@@ -2,7 +2,7 @@ const express = require('express')
 const Router = express.Router()
 
 
-const { processAllContracts } = require('./ContractRoute.js')
+const { processAllContracts } = require('../../Controllers/ContractControllers/ContractController.js')
 // contract
 	// contractHash -> an encrypted string that contains -
 	// (contract owner, senderId , amount)
@@ -28,4 +28,4 @@ Router.post('/processContracts', processAllContracts)
 
 
 
-return Router
+module.exports = Router

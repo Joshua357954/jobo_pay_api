@@ -46,7 +46,7 @@ const contractLength = 5
 const contractSchema = z.object({ 
 	senderId: z.number().int(),
 	receiverId: z.number().int(),
-	amount: z.number().float(),
+	amount: z.number(),
 	dateTime: z.date()
  })
 
@@ -69,7 +69,7 @@ class OfflinePaymentContract {
 
 
 
-	async function isContractValid (block) {
+	async isContractValid (block) {
 		// const blockTitle = Object.keys(block)[0] || null
 		if (!this.blockTitle) return Response(false,"Invalid Contract")
 		// Do the real checks
@@ -79,20 +79,21 @@ class OfflinePaymentContract {
 
 
 
-	async function isContractCashed (block) {
+	async isContractCashed (block) {
 		
 		const collectedUserId = blocked?.collectedUserId
 		
-		if (collectedUserId)
+		if (collectedUserId){
 			const _collect = Contract.findOne({where:block})
 			if (!_collect) 
 				return Response(false,'Contracted Not Cashed') 
 
-			return Response(true,'Contracted Cashed') 
+			return Response(true,'Contracted Cashed')
+		} 
 	}
 
 
-	async function cashContract (block) {
+	async cashContract (block) {
 
 		const amt = block.amount,  sId = block.senderId, rId = block.receiverId,time = block.dateTime
 		
@@ -129,8 +130,8 @@ class OfflinePaymentContract {
 
 			case this.processer == 'MERCHANT':
 				// create contract
-				const ccdetails = {senderId:sId, receiverId:rId, amount:amt, contractDateTime:time , collectedMerchantId:this.processerId }
-				Contract.create(ccdetails)
+				const merchantCCDetails = {senderId:sId, receiverId:rId, amount:amt, contractDateTime:time , collectedMerchantId:this.processerId }
+				Contract.create(merchantCCDetails)
 
 				// create transaction
 				const muDetails = {userId:sId, merchantId:this.processerId, transactionType:'TRANSFER', amount:amt, status:true, discription: 'Withdraw Money From User'}
@@ -153,7 +154,7 @@ class OfflinePaymentContract {
 	}
 
 
-	async function processContract ()  {
+	async  processContract ()  {
 		
 		try{
 
@@ -169,7 +170,7 @@ class OfflinePaymentContract {
 				if (this.isContractCashed(currentBlock)?.status){
 					continue
 				}
-				else:
+				else 
 					this.cashContract(currentBlock)
 			}
 
@@ -202,7 +203,7 @@ const processAllContracts = async(req,res) => {
 	if (!isPaymentSuccessful.status )
 		return res.status(501).send(isPaymentSuccessful)
 
-	else:
+	else
 		return res.status(200).send(isPaymentSuccessful)
 
 }

@@ -1,6 +1,7 @@
 const express = require('express')
 const api = express.Router()
-const mApi = express.Router()
+const merchantApi = express.Router()
+const { Response } = require('./Controllers/utils.js')
 
 // All Api Routes
 const UserRoute = require('./Routes/UserRoutes/UserRoute.js')
@@ -26,14 +27,19 @@ const MerchantAuthRoute = require('./Routes/MerchantRoutes/AuthRoute.js')
 
 const MerchantRoute = require('./Routes/MerchantRoutes/MerchantRoute.js')
 
-const MerrchantTransferRoute = require('./Routes/MerchantRoutes/TransferRoute.js')
+const MerchantTransferRoute = require('./Routes/MerchantRoutes/TransferRoute.js')
 
 // app.use route
-mApi.use('merchant',MerchantRoute)
+merchantApi.use('/merchant',MerchantRoute)
 
 
 
-// User Error Middleware  
+// User Error Middleware
+// api.use(error,(req,res) => {
+// 	console.log(error)
+// 	res.send(Response(false,error.toString()))
+// }) 
+
 //  Setup Socket to update users balance realtime 
 
 module.exports = api

@@ -1,6 +1,6 @@
+const db = require('../Database/models/index.js')
 
-
-const User;
+const User = db.User
 
 
 const getUserBalance = (io) => {

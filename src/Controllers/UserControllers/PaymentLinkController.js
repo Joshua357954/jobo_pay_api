@@ -1,5 +1,6 @@
 const { Response, getUser } = require('../utils.js')
 const db = require('../../Database/models/index.js')
+const { CreatePaymentLinkSchema, MakeLinkPaymentSchema } = require('./UserZodSchema.js')
 const { createSendUserTransaction,createReceiverUserTransaction } = require('./TransferController.js')
 
 
@@ -9,7 +10,7 @@ const User = db.User
 
 
 // POST: create
-const createPaymentLink = () => {
+const createPaymentLink = (req,res) => {
 	const _paymentLink = await PaymentLink.create(req.body)
 	return res.send(Response(true,'Payment Link Created'))
 }

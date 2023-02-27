@@ -1,11 +1,13 @@
 const express = require('express')
 const Router = express.Router()
 
-// contract
-	contractHash -> an encrypted string that contains -
-	(contract owner, senderId , amount)
 
-	contractKey
+const { processAllContracts } = require('./ContractRoute.js')
+// contract
+	// contractHash -> an encrypted string that contains -
+	// (contract owner, senderId , amount)
+
+	// contractKey
 
 // process contract -> [Array]
 	// check if this contract is from a user
@@ -18,8 +20,7 @@ const Router = express.Router()
 
 	//  cash transaction function ( to settle the both parties )
 
-
-
+Router.post('/processContracts', processAllContracts)
 
 
 

@@ -18,7 +18,11 @@ const getUserBeneficiaries = async(req,res) => {
 		const fetched_beneficiaries = await User.findOne({
 					where: {
 						UserId: userId
-					}, include: ['WalletBeneficiary','BankBeneficiary']
+					}, include: [
+									{ model: WalletBeneficiary, include: 
+										[{model:User, attributes: ['name,username','email','phone']}]},
+									{ model: BankBeneficiary }
+								]
 				})
 			
 		return res.send(Response(true,fetched_beneficiaries))
@@ -56,44 +60,45 @@ const addBeneficiary = async(req,res) => {
 
 
 
-const updateBeneficiary = async(req,res) => {
+// const updateBeneficiary = async(req,res) => {
 
-	const { data, type, id, userId } = req.params
+// 	const { data, type, id, userId } = req.params
 
-	if (!id || !userId || !data) return res.send(Response(false,"Missing Field"))
+// 	if (!id || !userId || !data) return res.send(Response(false,"Missing Field"))
 
-	try{
+// 	try{
 
-		if ( type == "BANK" ) {
-			const beneficiary_to_upadte_b = await BankBeneficiary.update(data,{
-				where:{
-					id,
-					UserId: userId
-				}
-			})
-		}
+// 		if ( type == "BANK" ) {
+// 			const beneficiary_to_upadte_b = await BankBeneficiary.update(data,{
+// 				where:{
+// 					id,
+// 					UserId: userId
+// 				}
+// 			})
+// 		}
 
-		else {
-			const beneficiary_to_upadte_w = await WalletBeneficiary.update(data,{
-				where:{
-					id,
-					UserId: userId
-				}
-			})
-		}
-
-
-		return res.send(Response(true,"Beneficiary updated successfully"))
-	}
-
-	catch(error){
-		console.log(error)
-		return res.send(Response(false,"Error Updating Beneficiary"))
-	}
-}
+// 		else {
+// 			const beneficiary_to_upadte_w = await WalletBeneficiary.update(data,{
+// 				where:{
+// 					id,
+// 					UserId: userId
+// 				}
+// 			})
+// 		}
 
 
+// 		return res.send(Response(true,"Beneficiary updated successfully"))
+// 	}
 
+// 	catch(error){
+// 		console.log(error)
+// 		return res.send(Response(false,"Error Updating Beneficiary"))
+// 	}
+// }
+
+
+
+// DELETE:
 const deleteBeneficiary = async(req,res) => {
 	const { id, type, userId } = req.params
 
@@ -129,11 +134,12 @@ const deleteBeneficiary = async(req,res) => {
 }
 
 
+
+
+
 module.exports = {
 	getUserBeneficiaries,
-	addBeneficiary,
-	updateBeneficiary,
-	deleteBeneficiary,
+	deleteBeneficiary
 }
 
 

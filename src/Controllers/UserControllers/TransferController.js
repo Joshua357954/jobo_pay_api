@@ -2,6 +2,7 @@ const { Op } = require('sequelize')
 const { Response } = require('../utils.js')
 const db = require('../../Database/models/index.js')
 const { SendMoneySchema } = require('./UserZodSchema.js')
+const { addBeneficiary } require('./BeneficiaryController.js')
 const { createSenderUserTransaction, createReceiverUserTransaction } = require('./TransactionController.js')
 
 const User = db.User
@@ -15,6 +16,7 @@ const sendMoney = async(req,res) => {
 	let status = true
 	const { senderId, receiverId, pin, amount } = SendMoneySchema.parse(req.body) 
 
+	// If type == bank do some other things ..
 
 	if (!senderId || !receiverId || !amount) return res.send(Response(false,"Missing Field"))
 
@@ -58,6 +60,18 @@ const sendMoney = async(req,res) => {
 			'USER',
 			amount
 		)
+
+		// check if user is already a beneficiary 
+		const isBeneficiary = await WalletBeneficiary.findOne({where:{
+											beneficiaryId:receiverId,
+											UserId:senderId
+										}})
+		// Add User as beneficiaries
+		if (!isBeneficiary.id)
+			addBeneficiary({beneficiaryId:receiverId}, type="WALLET", senderId)
+	
+		// Finish transaction
+		return 'Finish'
 	}
 
 	catch(error) {

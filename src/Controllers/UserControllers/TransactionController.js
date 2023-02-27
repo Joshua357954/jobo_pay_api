@@ -68,11 +68,19 @@ const createSenderUserTransaction = async(senderId,receiverId,status,amount,from
 
 const createReceiverUserTransaction = async(senderId,receiverId,fromType='USER',amount,status=true,transactionType='received') => {
 	
-	const _sendr = await User.findByPk(senderId)
+	let _sendr;
+
+	if (fromType != 'PaymentLink')
+		_sendr = await User.findByPk(senderId)
+	else
+		_sendr = senderId
+
 	const _recevr = await User.findByPk(receiverId)
 
+	const isPLink = () => fromType == 'PaymentLink' ? true : false
+
 	// You Received 500 from Samuel - (@joshuabee)
-	const discription = `${DotIcon} You Received ${NairaIcon}${amount}, From  ${_sendr.name} - (@${_sendr.username})`
+	const discription = `${DotIcon} You Received ${NairaIcon}${amount}, From  ${isPLink ? senderId : _sendr.name} - (@${isPLink ? "PaymentLink" : _sendr.username})`
 
 	try{
 		if (!status) return console.log("Transaction Was Not Successful")
@@ -83,7 +91,7 @@ const createReceiverUserTransaction = async(senderId,receiverId,fromType='USER',
 			transactionType,
 			amount,
 			fromType,
-			fromId:senderId,
+			fromId: fromType == 'PaymentLink' ? 0 : senderId,
 			UserId:receiverId
 
 		})

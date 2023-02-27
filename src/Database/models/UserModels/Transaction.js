@@ -13,7 +13,7 @@ module.exports = (sequelize,DataTypes,User) => {
 
 		fromType: {
 			type: DataTypes.ENUM,
-			values: ['USER','MERCHANT'],
+			values: ['USER','MERCHANT','PaymentLink'],
 			allowNull: false
 		},
 

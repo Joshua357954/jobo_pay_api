@@ -1,14 +1,8 @@
 
 
-
-
-
-
-
-
 // preform all sendinds to user
 
-module.exports = (io) {
+module.exports = (io) => {
 
 	io.on('connection',(socket) => {
 		
@@ -19,11 +13,11 @@ module.exports = (io) {
 
 
 		socket.on('sendMoney',({senderId,receiverId,amount}) => {
-			console.log(senderId,receiverId,amount\
+			console.log(senderId,receiverId,amount)
 			socket.to(receiverId).emit('receivedMoney',({senderId,amount}))
 		})
 	
-	}
+	})
 	
 
 }

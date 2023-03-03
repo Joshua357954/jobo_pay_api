@@ -1,11 +1,11 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const apiRoute = require('./src/api.js')
+const apiRoute = require('./api/api.js')
 
-require('./src/Database/seeders/index.js') 
+require('./api/Database/seeders/index.js') 
 
-const corsOptions = {
+const cors_options = {
 	pingTimeout : 60000,
 	cors : {
 		origin:'*'
@@ -13,8 +13,6 @@ const corsOptions = {
 }
 
 const PORT = process.env.PORT || 7900
-
-const io = require('socket.io')(server, cors_options )
 
 
 app.use(cors())
@@ -32,12 +30,14 @@ app.use('/api',apiRoute)
 app.get('/',(req,res) => {
 	res.send( HTML )
 })
+   
 
+const server = app.listen(PORT, () => console.log(`Server Running On Port : ${PORT}`))
 
-app.listen(PORT, () => console.log(`Server Running On Port : ${PORT}`))
+const io = require('socket.io')(server, cors_options )
 
 // socket-io
-require('./src/Socket/socket.js')(io)
+require('./api/Socket/socket.js')(io)
 
 
 

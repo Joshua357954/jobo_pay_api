@@ -5,16 +5,17 @@ const apiRoute = require('./src/api.js')
 
 require('./src/Database/seeders/index.js') 
 
-// const io = require('socket.io')(server, cors_options )
-
-// const corsOptions = {
-// 	pingTimeout : 60000,
-// 	cors : {
-// 		origin:'*'
-// 	}
-// }
+const corsOptions = {
+	pingTimeout : 60000,
+	cors : {
+		origin:'*'
+	}
+}
 
 const PORT = process.env.PORT || 7900
+
+const io = require('socket.io')(server, cors_options )
+
 
 app.use(cors())
 app.use(express.json())
@@ -35,8 +36,8 @@ app.get('/',(req,res) => {
 
 app.listen(PORT, () => console.log(`Server Running On Port : ${PORT}`))
 
-
-// require('./src/Socket/socket.js')(io)
+// socket-io
+require('./src/Socket/socket.js')(io)
 
 
 

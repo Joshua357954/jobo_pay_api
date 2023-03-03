@@ -1,14 +1,34 @@
-const db = require('../Database/models/index.js')
-
-const User = db.User
 
 
-const getUserBalance = (io) => {
-	io.on('userBalance',async(userId) => {
-		const _foundUser = awaitUser.findByPk(userId)
-		socket.to(userId).emit('refreshBalance',_foundUser.balance)
-	})
+
+
+
+
+
+
+// preform all sendinds to user
+
+module.exports = (io) {
+
+	io.on('connection',(socket) => {
+		
+		socket.on('setup',(userId) => {
+			socket.join(userId)
+			socket.to(userId).emit('connected',"Success")
+		})
+
+
+		socket.on('sendMoney',({senderId,receiverId,amount}) => {
+			console.log(senderId,receiverId,amount\
+			socket.to(receiverId).emit('receivedMoney',({senderId,amount}))
+		})
+	
+	}
+	
+
 }
+
+
 
 
 

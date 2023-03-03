@@ -19,6 +19,7 @@
     "express-async-handler": "^1.2.0",
     "mysql2": "^2.3.3",
     "node-cron": "^3.0.2",
+    "nodemailer": "^6.9.1",
     "opay": "^1.0.94",
     "sequelize": "^6.28.0",
     "sequelize-cli": "^6.5.2",

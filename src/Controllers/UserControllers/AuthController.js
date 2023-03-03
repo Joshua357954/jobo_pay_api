@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 const { Op } = require('Sequelize')
 const { Response } = require('../utils.js')
+const { sendEmail } = require('./SendMail.js')
 const db = require('../../Database/models/index.js')
 const { giftUserSetup } = require('./GiftCashController.js')
 const { UserLoginSchema, UserRegisterSchema, ForgotPasswordSchema, ResetPasswordSchema } = require('./UserZodSchema.js')
@@ -170,7 +171,7 @@ const forgotPassword = async(req,res) => {
 		console.log(resetString)
 
 		// Sending De Mail
-		// await sendEmail(email,text_to_send)
+		await sendEmail(email,text_to_send)
 
 		return res.send(Response(true,`A password reset email was sent to ${email} :),\nThe reset Link expires in 5 minutes`))
 

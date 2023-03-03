@@ -40,9 +40,11 @@ const getUserTransactions = async(req,res) => {
 const createSenderUserTransaction = async(senderId,receiverId,status,amount,fromType='USER',transactionType='transfer') => {
 
 	const _receiver = await User.findByPk(receiverId)
+	const isBankTransfer = () => transactionType == 'bankTransfer'
 
-	const discription = `${DotIcon} You Transfered ${NairaIcon}${amount}, to ${_receiver.name} - @(${_receiver.username})`
-	
+	const discription = `${DotIcon} You Transfered ${NairaIcon}${amount}, to 
+								${isBankTransfer ? receiverId : `${_receiver.name} - @(${_receiver.username})`} `
+
 	try{
 		const senderTransaction = Transaction.create({
 			discription ,
@@ -52,7 +54,7 @@ const createSenderUserTransaction = async(senderId,receiverId,status,amount,from
 			fromType,
 			transactionType,
 			fromId:senderId,
-			UserId:senderId
+			UserId: transactionType == 'bankTransfer' ? senderId : 0
 
 		})
 

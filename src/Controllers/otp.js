@@ -7,13 +7,13 @@ const NoAccountUser = db.NoAccountUser
 
 
 
-function createOtp () {	
+function createOTP () {	
 	const otp = Math.floor(1000 + Math.random() * 9000);
 	return JSON.stringify({ otp: otp, expTime: Date.now() + 60000 * 5 })
 }
 
 
-async function addOtpToDatabase (user,otp) {
+async function addOTPToDatabase (user,otp) {
 
 	await NoAccountUser.update({otp},{
 					where:{
@@ -35,12 +35,11 @@ async function addOtpToDatabase (user,otp) {
 const sendOtp = async(user) => {
 
 	// Generate a random four-digit OTP
-	const otp = createOtp()
+	const otp = createOTP()
 
-	// send otp via sms using twilio
 
 	// check if any otp exists
-	const _checkSentOtp = await NoAccountUser.findOne({
+	const _checkSentOTP = await NoAccountUser.findOne({
 									where:{
 										[Op.or]: {
 											phone:user,
@@ -51,21 +50,21 @@ const sendOtp = async(user) => {
 								})
 
 	// check if op is expired
-	if ( Date.now() > parseOtp(_check.otp) ){
-		addOtpToDatabase(user,otp)
-		return Response(true,`An New Otp was sent to ${user} Just now , Otp expires in 10minutes `);
+	if ( Date.now() > parseOTP(_check.otp) ){
+		addOTPToDatabase(user,otp)
+		return Response(true,`An New OTP was sent to ${user} Just now , OTP expires in 10minutes `);
 	}
 
 
-	if (_checkSentOtp.otp)
-		return Response(true,`An Otp has already been sent to ${user}, Otp expires in 10minutes `)
+	if (_checkSentOTP.otp)
+		return Response(true,`An OTP has already been sent to ${user}, OTP expires in 10minutes `)
 
 	// add otp to db
-	addOtpToDatabase(user,otp)
+	addOTPToDatabase(user,otp)
 	
 
 	console.log(otp)
-	return Response(true,"Otp Sent !");
+	return Response(true,otp.otp);
 
 }
 
@@ -73,11 +72,11 @@ const sendOtp = async(user) => {
 
 
 
-const parseOtp = (otpData) => JSON.parse(otpData)
+const parseOTP = (otpData) => JSON.parse(otpData)
 
 
 // confirm otp sent
-const confirmOtp = async(user,otp) => {
+const confirmOTP = async(user,otp) => {
 	
 	const _check = await NoAccountUser.findOne({
 								where:{
@@ -90,11 +89,11 @@ const confirmOtp = async(user,otp) => {
 	
 	// check if both opt match
 	if (_check.otp != otp)
-		return Response(false,'Inalid Valid Otp ')
+		return Response(false,'Inalid Valid OTP ')
 	
 	// check if otp is expired
-	if ( Date.now() > parseOtp(_check.otp) )
-		return Response(false,'Otp Expired , Apply for a new one')
+	if ( Date.now() > parseOTP(_check.otp) )
+		return Response(false,'OTP Expired , Apply for a new one')
 
 	// delete otp after use
 	await NoAccountUser.update({otp:null},{
@@ -107,7 +106,7 @@ const confirmOtp = async(user,otp) => {
 					})
 
 	// Then its correct
-	return Response(true,'Otp is Correct')
+	return Response(true,'OTP is Correct')
 
 }
 
@@ -117,5 +116,5 @@ const confirmOtp = async(user,otp) => {
 
 module.exports = {
 	sendOtp,
-	confirmOtp,
+	confirmOTP,
 }

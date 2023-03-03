@@ -12,7 +12,10 @@ module.exports = (sequelize,DataTypes) => {
 
 		password: { type: DataTypes.STRING },
 
-		pin: { type: DataTypes.INTEGER },
+		pin: { 
+			type: DataTypes.INTEGER ,
+			allowNull:true
+		},
 
 		email: { 
 			type: DataTypes.STRING,
@@ -32,7 +35,17 @@ module.exports = (sequelize,DataTypes) => {
 		
 		contractKey:{
 			type: DataTypes.STRING,
-			unique: true
+			unique: true,
+			allowNull:true
+
+		},
+		allowMerchantTransactions:{
+			type: DataTypes.BOOLEAN,
+			defaultValue:false
+		},
+		merchantPin:{
+			type: DataTypes.INTEGER,
+			allowNull:false
 		}
 
 	})

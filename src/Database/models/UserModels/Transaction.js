@@ -8,7 +8,7 @@ module.exports = (sequelize,DataTypes,User) => {
 		status: { type: DataTypes.STRING, allowNull:true },
 
 		transactionType: {
-			type: DataTypes.ENUM('withdraw', 'transfer ', 'fund', 'received')
+			type: DataTypes.ENUM('withdraw', 'transfer ','bankTransfer','fund', 'received')
 		},
 
 		fromType: {

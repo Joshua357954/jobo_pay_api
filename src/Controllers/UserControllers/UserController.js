@@ -17,9 +17,9 @@ const getUser = async(req,res) => {
 	// res.send("User 1 Joshua")
 
 	const _user = await User.findByPk(userId)
-	delete _user.pin
+	//delete _user.pin
 
-	return res.send(Response(true,_user))
+	return res.send(Response(true,{..._user,pin:'****'}))
 }
 
 
@@ -137,10 +137,29 @@ const userInquiry = async(req,res) => {
 }
 
 
+// auth required
+const toggleAllowMerchantTransaction = async(req,res) => {
+	const { userId } = req.params
+
+
+	const _user = await User.update(
+		{allowMerchantTransactions:db.sequelize.literal(`!allowMerchantTransactions`)},
+		{ where: {
+			id:userId
+		}}
+	)
+
+	return _user && res.send(Response(true,'Success'))
+}
+
+
+
+
 module.exports = {
 	getUser,
 	fundUserWallet,
 	updateTransactionPin,
 	updateUserProfile,
-	userInquiry
+	userInquiry,
+	toggleAllowMerchantTransaction
 }

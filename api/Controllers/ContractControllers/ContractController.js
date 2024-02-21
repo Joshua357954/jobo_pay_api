@@ -195,7 +195,7 @@ const processAllContracts = async(req,res) => {
 
 	const { processer, processerId, contract } = req.body
 
-	const paymentContract = OfflinePaymentContract(processer,processerId,contract)
+	const paymentContract = new OfflinePaymentContract(processer,processerId,contract)
 
 	// call process contract method
 	const isPaymentSuccessful = paymentContract.processContract()
